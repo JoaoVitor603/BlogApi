@@ -1,8 +1,9 @@
-import Users from '../User.Entity';
-
-export default interface IUserModel extends Users {
-  id: number;
+export default interface IUserModel {
+  id: string;
   userName: string;
   email: string;
   password: string;
+  admin: boolean;
+  created_at?: Date;
+  updated_at?: Date;
 }

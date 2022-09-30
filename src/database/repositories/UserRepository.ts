@@ -5,18 +5,18 @@ import Users from '../entities/User.Entity';
 
 @EntityRepository(Users)
 export class UserRepository extends Repository<Users> {
-  public async saveNewUser(user: IUser): Promise<IUserModel> {
+  public async saveNewUser(user: IUser): Promise<string> {
     const { userName, email, password, admin } = user;
 
     const newUser = this.create({ userName, email, password, admin });
 
-    await this.save(newUser);
+    const saveResult = await this.save(newUser);
 
-    return newUser;
+    return saveResult.id.toString();
   }
 
   // ToDO criar interface para o tipo das Promise
-  public async findByEmail(email: string): Promise<Users | undefined> {
+  public async findByEmail(email: string): Promise<IUserModel | undefined> {
     const user = await this.findOne({
       where: {
         email,
@@ -25,7 +25,7 @@ export class UserRepository extends Repository<Users> {
     return user;
   }
 
-  public async findById(id: string): Promise<Users | undefined> {
+  public async findById(id: string): Promise<IUserModel | undefined> {
     const user = await this.findOne({
       where: {
         id,

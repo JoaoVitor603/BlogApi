@@ -3,6 +3,7 @@
 // import { CreateProductInput } from '../schemas/product.schema';
 
 import { NextFunction, Request, Response } from 'express';
+import { getCustomRepository } from 'typeorm';
 import logger from '../../config/logger';
 import { UserRepository } from '../../database/repositories/UserRepository';
 import IController from '../../models/IController';
@@ -36,9 +37,9 @@ export default class CreateUserController implements IController {
 
       const { userName, email, password } = body;
 
-      const userRespository = new UserRepository();
-
-      const createUser = new CreateUserService(userRespository);
+      const createUser = new CreateUserService(
+        getCustomRepository(UserRepository)
+      );
 
       const data: IcreateUserRequestDTO = {
         userName,
@@ -47,6 +48,7 @@ export default class CreateUserController implements IController {
       };
 
       const serviceResult = await createUser.execute(data);
+
       return response.status(201).send(serviceResult);
     } catch (error: any) {
       logger.error(`CreateUserController: ${error.message}`);

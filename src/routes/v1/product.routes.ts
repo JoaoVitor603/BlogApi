@@ -1,11 +1,13 @@
 import { Router } from 'express';
 
 import CreateUserController from '../../controllers/createUserController/CreateUserController';
+import validate from '../../middlewares/validateResource';
+import { createUserSchema } from '../../schemas/user.schema';
 
 export const userRouter = Router();
-const userControler = new CreateUserController();
+const userController = new CreateUserController();
 
-userRouter.post('/', userControler.handle);
+userRouter.post('/', validate(createUserSchema), userController.handle);
 
 /**
  * @openapi
