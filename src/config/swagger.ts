@@ -32,17 +32,17 @@
 //   ],
 // };
 
-// // const swaggerSpec = swaggerJsdoc(options);
+// const swaggerSpec = swaggerJsdoc(options);
 
-// // function swaggerDocs(app: Express, url: string, port: number) {
-// //   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// function swaggerDocs(app: Express, url: string, port: number) {
+//   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// //   app.get('/docs.json', (req: Request, res: Response) => {
-// //     res.setHeader('Content-Type', 'application/json');
-// //     res.send(swaggerSpec);
-// //   });
+//   app.get('/docs.json', (req: Request, res: Response) => {
+//     res.setHeader('Content-Type', 'application/json');
+//     res.send(swaggerSpec);
+//   });
 
-// //   logger.info(`Documentação disponível em http://${url}:${port}/docs`);
-// // }
+//   logger.info(`Documentação disponível em http://${url}:${port}/docs`);
+// }
 
-// // export default swaggerDocs;
+// export default swaggerDocs;

@@ -2,7 +2,7 @@ import { Column, Entity } from 'typeorm';
 import Base from './Base.Entity';
 
 @Entity('users')
-export default class Product extends Base {
+export default class User extends Base {
   @Column({ length: 120 })
   public userName: string;
 

@@ -3,31 +3,31 @@ import { getCustomRepository } from 'typeorm';
 import logger from '../../config/logger';
 import { UserRepository } from '../../database/repositories/UserRepository';
 import IController from '../../models/IController';
-import CreateUserService from '../../services/createUserService/createUserService';
-import IcreateUserRequestDTO from '../../services/createUserService/IcreateUserRequestDTO';
+import CreateSessionService from '../../services/createSessionService/createSessionService';
 
-export default class CreateUserController implements IController {
+import IcreateSessionRequestDTO from '../../services/createSessionService/IcreateSessionRequest';
+
+export default class CreateSessionController implements IController {
   public async handle(
     request: Request,
     response: Response,
     next: NextFunction
   ) {
     try {
+      const userRepository = getCustomRepository(UserRepository);
+
       const { body } = request;
 
-      const { userName, email, password } = body;
+      const { email, password } = body;
 
-      const createUser = new CreateUserService(
-        getCustomRepository(UserRepository)
-      );
+      const createSession = new CreateSessionService(userRepository);
 
-      const data: IcreateUserRequestDTO = {
-        userName,
+      const data: IcreateSessionRequestDTO = {
         email,
         password,
       };
 
-      const serviceResult = await createUser.execute(data);
+      const serviceResult = await createSession.execute(data);
 
       return response.status(201).send(serviceResult);
     } catch (error: any) {

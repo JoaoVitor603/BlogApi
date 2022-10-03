@@ -1,36 +1,31 @@
-// import { request } from 'http';
+// import { mock } from 'jest-mock-extended';
+// // import supertest from 'supertest';
+// import Request from 'supertest';
 
-// import supertest from 'supertest';
-// import { object } from 'yup';
 // import UserRepositoryFake from '../../src/database/repositories/fake/UserRepositoryFake';
-// import app from '../../src/index';
-// import App from '../../src/index';
-// import CreateUserService from '../../src/services/createUserService/createUserService';
 
-// jest.mock('typeorm');
+import supertest from 'supertest';
+import app from '../../src/index';
 
-// describe('App', () => {
-//   it('should return hello world', async () => {
-//     const { text, status } = await supertest(app).get('/');
-//     expect(status).toBe(200);
-//     expect(text).toBe('Hello world');
-//   });
-// });
+// // const repositoryMock = new UserRepositoryFake();
+
+// beforeAll(async () => await  ());
 
 // describe('User tests', () => {
-//   const userRespositoryFake = new UserRepositoryFake();
-//   const sut = new CreateUserService(userRespositoryFake);
-
-//   describe('Create User', () => {
-//     it('should create a new user', async () => {
-//       request(app);
-//       .post('/');
-//       const user = await sut.execute({
-//         userName: 'Primeiro usuário',
-//         email: 'teste10@gmail.com',
-//         password: 'teste123',
-//       });
-//       expect(user).toHaveProperty('id');
+//   it('should create a new user', async () => {
+//     const response = await Request(app).post('/').send({
+//       userName: 'Primeiro usuário',
+//       email: 'testeSuper@gmail.com',
+//       password: 'teste123',
 //     });
+//     expect(response.status).toBe(201);
 //   });
 // });
+
+describe('App', () => {
+  it('should return hello world', async () => {
+    const { status, body } = await supertest(app).get('/api/healthcheck');
+    expect(status).toBe(200);
+    expect(body.message).toBe('Hello World');
+  });
+});

@@ -15,7 +15,8 @@ import ApiError from './utils/apiError.utils';
 const app = express();
 
 app.use(express.json());
-app.use(routes);
+// app.use(routes);
+routes(app);
 app.use(helmet());
 app.use(compression());
 app.use(cors());
@@ -42,16 +43,23 @@ app.use(
   }
 );
 
+app.get('/api/healthcheck', (req: Request, res: Response) =>
+  res.sendStatus(200)
+);
+
+if (config.env !== environments.PRODUCTION) {
+  app.use(morgan('tiny'));
+}
+
 app.listen(config.port, async () => {
   logger.info(`API rodando em http://${config.publicUrl}:${config.port}`);
 
   await database();
 
-  // routes(app);
+  routes(app);
 
   // if (config.env !== environments.PRODUCTION) {
   //   swaggerDocs(app, config.publicUrl, config.port);
   // }
 });
-
 export default app;
