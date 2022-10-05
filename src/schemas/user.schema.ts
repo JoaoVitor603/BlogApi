@@ -1,27 +1,5 @@
 import { object, string, InferType } from 'yup';
 
-/**
- * @openapi
- * components:
- *   schemas:
- *     Product:
- *       type: object
- *       required:
- *        - title
- *        - description
- *        - price
- *        - image
- *       properties:
- *         title:
- *           type: string
- *         description:
- *           type: string
- *         price:
- *           type: number
- *         image:
- *           type: string
- */
-
 const payload = {
   body: object({
     userName: string().defined('UserName is required'),
