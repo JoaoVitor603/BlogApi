@@ -2,6 +2,7 @@ import { Express, Request, Response } from 'express';
 import { postRouter } from './v1/post.routes';
 import { userRouter } from './v1/user.routes';
 import { sessionRouter } from './v1/session.routes';
+import { publicPost } from './v1/allPost.routes';
 
 function routes(app: Express) {
   app.get('/api/healthcheck', (req: Request, res: Response) =>
@@ -10,6 +11,7 @@ function routes(app: Express) {
 
   app.use('/api/v1/users', userRouter);
   app.use('/api/v1/posts', postRouter);
+  app.use('/api/v1/allPosts/', publicPost);
   app.use('/api/v1/session', sessionRouter);
 }
 

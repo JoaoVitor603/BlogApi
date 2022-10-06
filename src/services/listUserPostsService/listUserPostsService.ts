@@ -1,6 +1,6 @@
 import IPostRepository from '../../database/repositories/interfaces/IPostRepository';
 import IUserRepository from '../../database/repositories/interfaces/IUserRepository';
-import IlistUserPostRequestDTO from './IListUserPosts';
+import IlistUserPostRequestDTO from './IlistUserPostRequestDTO';
 import ApiError from '../../utils/apiError.utils';
 
 export default class ListPostsUserService {
@@ -10,15 +10,16 @@ export default class ListPostsUserService {
   ) {}
 
   public async execute(data: IlistUserPostRequestDTO) {
-    const { id } = data;
-
-    const userOwner = await this.userRepository.findById(id);
+    if (!data.id) {
+      throw new ApiError(400, false, 'User not found');
+    }
+    const userOwner = await this.userRepository.findById(data.id);
 
     if (!userOwner) {
       throw new ApiError(400, false, 'User not found');
     }
 
-    const newPost = await this.postRespository.listPosts(id);
+    const newPost = await this.postRespository.listPosts(userOwner.id);
 
     return newPost;
   }

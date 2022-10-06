@@ -24,7 +24,7 @@ export default class CreateUserService {
       content,
       category,
       postOwnerUserName: userOwner.userName,
-      postOwnerId,
+      postOwner: userOwner,
     });
 
     return newPost;

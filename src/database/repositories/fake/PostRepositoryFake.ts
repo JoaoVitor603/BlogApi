@@ -42,7 +42,6 @@ class PostRepositoryFake implements IPostRepository {
       category: ['Tecnologia'],
       created_at: '2022-07-06T03:51:22.354Z' as unknown as Date,
       updated_at: '2022-07-06T03:51:22.354Z' as unknown as Date,
-      postOwnerId: 'e6f38942-a5a2-4513-b27d-a5875255ff99',
     },
     {
       id: '776224b47ce040dcbe787c01b8fb51e8',
@@ -52,7 +51,6 @@ class PostRepositoryFake implements IPostRepository {
       category: ['Tecnologia'],
       created_at: '2022-07-06T03:51:22.354Z' as unknown as Date,
       updated_at: '2022-07-06T03:51:22.354Z' as unknown as Date,
-      postOwnerId: 'e6f38942-a5a2-4513-b27d-a5875255ff98',
     },
   ];
 

@@ -4,7 +4,7 @@ import logger from '../../config/logger';
 import { PostRepository } from '../../database/repositories/PostRepository';
 import { UserRepository } from '../../database/repositories/UserRepository';
 import IController from '../../models/IController';
-import IlistUserPostRequestDTO from '../../services/listUserPostsService/IListUserPosts';
+import IlistUserPostRequestDTO from '../../services/listUserPostsService/IlistUserPostRequestDTO';
 import ListPostsUserService from '../../services/listUserPostsService/listUserPostsService';
 
 export default class ListUserPostsController implements IController {
@@ -17,9 +17,7 @@ export default class ListUserPostsController implements IController {
       const postRespository = getCustomRepository(PostRepository);
       const userRepository = getCustomRepository(UserRepository);
 
-      const { body } = request;
-
-      const { postOwnerId } = body;
+      const { id } = request.params;
 
       const postsUser = new ListPostsUserService(
         postRespository,
@@ -27,7 +25,7 @@ export default class ListUserPostsController implements IController {
       );
 
       const data: IlistUserPostRequestDTO = {
-        id: postOwnerId,
+        id,
       };
 
       const serviceResult = await postsUser.execute(data);

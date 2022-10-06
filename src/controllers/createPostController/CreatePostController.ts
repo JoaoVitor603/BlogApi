@@ -17,9 +17,11 @@ export default class CreatePostController implements IController {
       const postRespository = getCustomRepository(PostRepository);
       const userRepository = getCustomRepository(UserRepository);
 
+      const { id } = request.params;
+
       const { body } = request;
 
-      const { title, content, category, postOwnerId } = body;
+      const { title, content, category } = body;
 
       const createPost = new CreatePostService(postRespository, userRepository);
 
@@ -27,7 +29,7 @@ export default class CreatePostController implements IController {
         title,
         content,
         category,
-        postOwnerId,
+        postOwnerId: id,
       };
 
       const serviceResult = await createPost.execute(data);

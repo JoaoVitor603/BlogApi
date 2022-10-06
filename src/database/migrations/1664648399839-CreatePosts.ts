@@ -24,6 +24,11 @@ export class CreatePosts1664648399839 implements MigrationInterface {
             type: 'varchar',
           },
           {
+            name: 'postOwnerId',
+            type: 'uuid',
+            isNullable: true,
+          },
+          {
             name: 'postOwnerUserName',
             type: 'varchar',
             isNullable: true,
