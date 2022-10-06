@@ -5,7 +5,7 @@ export default interface IPost {
   title: string;
   content: string;
   postOwnerUserName: string;
-  postOwner: IUserModel;
+  postOwner?: IUserModel;
   category: string[];
   created_at?: Date;
   updated_at?: Date;
