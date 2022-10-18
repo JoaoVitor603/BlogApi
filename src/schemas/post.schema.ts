@@ -1,5 +1,35 @@
 import { object, string, InferType, array } from 'yup';
 
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     CreatePostInput:
+ *       type: object
+ *       required:
+ *        - title
+ *        - content
+ *        - category
+ *       properties:
+ *         title:
+ *           type: string
+ *         content:
+ *           type: string
+ *         category:
+ *           type: array
+ *           items:
+ *            type: string
+ *
+ *
+ *     CreatePostResponse:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The new post Id
+ *
+ */
+
 const payload = {
   body: object({
     postOwnerID: object().shape({

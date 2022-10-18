@@ -15,7 +15,6 @@ export default class CreateSessionController implements IController {
   ) {
     try {
       const userRepository = getCustomRepository(UserRepository);
-
       const { body } = request;
 
       const { email, password } = body;
