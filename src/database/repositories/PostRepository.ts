@@ -5,7 +5,7 @@ import Post from '../entities/Posts.Entity';
 
 @EntityRepository(Post)
 export class PostRepository extends Repository<Post> {
-  public async createNewPost(post: IPost): Promise<string> {
+  public async createNewPost(post: IPost): Promise<IPost> {
     const { title, content, category, postOwner, postOwnerUserName } = post;
 
     const newPost = this.create({
@@ -18,7 +18,7 @@ export class PostRepository extends Repository<Post> {
 
     const saveResult = await this.save(newPost);
 
-    return saveResult.id.toString();
+    return saveResult;
   }
 
   public async findById(id: string): Promise<IPostModel | undefined> {
@@ -49,7 +49,7 @@ export class PostRepository extends Repository<Post> {
     await this.remove(postId);
   }
 
-  public async listPosts(id: string): Promise<Post[]> {
+  public async listPosts(id: string): Promise<IPost[]> {
     const post = await this.find({
       where: {
         postOwner: id,
@@ -65,9 +65,9 @@ export class PostRepository extends Repository<Post> {
     return posts;
   }
 
-  public async updatePost(post: IPostModel): Promise<string> {
+  public async updatePost(post: IPost): Promise<IPost> {
     const saveResult = await this.save(post);
 
-    return saveResult.id.toString();
+    return saveResult;
   }
 }

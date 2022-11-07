@@ -1,38 +1,40 @@
-import { NextFunction, Request, Response } from 'express';
+import {
+  Body,
+  Controller,
+  OperationId,
+  Post,
+  Route,
+  SuccessResponse,
+  Tags,
+} from 'tsoa';
 import { getCustomRepository } from 'typeorm';
-import logger from '../../config/logger';
 import { UserRepository } from '../../database/repositories/UserRepository';
-import IController from '../../models/IController';
 import CreateUserService from '../../services/createUserService/createUserService';
 import IcreateUserRequestDTO from '../../services/createUserService/IcreateUserRequestDTO';
 
-export default class CreateUserController implements IController {
+@Route('/users')
+export class CreateUserController implements Controller {
+  @Tags('User')
+  @Post('')
+  @OperationId('createUser')
+  @SuccessResponse('201', 'Created')
   public async handle(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ) {
-    try {
-      const { body } = request;
+    @Body() requestBody: IcreateUserRequestDTO
+  ): Promise<string> {
+    const { userName, email, password } = requestBody;
 
-      const { userName, email, password } = body;
+    const createUser = new CreateUserService(
+      getCustomRepository(UserRepository)
+    );
 
-      const createUser = new CreateUserService(
-        getCustomRepository(UserRepository)
-      );
+    const data: IcreateUserRequestDTO = {
+      userName,
+      email,
+      password,
+    };
 
-      const data: IcreateUserRequestDTO = {
-        userName,
-        email,
-        password,
-      };
+    const serviceResult = await createUser.execute(data);
 
-      const serviceResult = await createUser.execute(data);
-
-      return response.status(201).send(serviceResult);
-    } catch (error: any) {
-      logger.error(`CreateUserController: ${error.message}`);
-      return next(error);
-    }
+    return serviceResult;
   }
 }

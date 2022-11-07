@@ -5,8 +5,25 @@ export default interface IPost {
   title: string;
   content: string;
   postOwnerUserName: string;
-  postOwner?: IUserModel;
   category: string[];
+  postOwner?: IUserModel;
   created_at?: Date;
   updated_at?: Date;
+}
+
+/**
+ @example {
+  "title": "Titulo de Example",
+  "content": "sou um exemplo",
+  "category": ["TECNOLOGIA"]
+ }
+ */
+export interface IPostRequest {
+  title: string;
+  content: string;
+  category: string[];
+}
+
+export interface ValidateErrorJSON {
+  message: string;
 }

@@ -1,43 +1,54 @@
-import { NextFunction, Request, Response } from 'express';
 import { getCustomRepository } from 'typeorm';
-import logger from '../../config/logger';
+import {
+  Body,
+  Path,
+  Controller,
+  SuccessResponse,
+  Post,
+  Tags,
+  Route,
+  Security,
+  OperationId,
+} from 'tsoa';
 import { PostRepository } from '../../database/repositories/PostRepository';
 import { UserRepository } from '../../database/repositories/UserRepository';
-import IController from '../../models/IController';
 import IcreatePostRequestDTO from '../../services/createPostService/IcreatePostRequestDTO';
 import CreatePostService from '../../services/createPostService/createPostService';
 
-export default class CreatePostController implements IController {
+import IPost, { IPostRequest } from '../../models/IPost';
+
+@Route('/posts')
+export class CreatePostController extends Controller {
+  /**
+   * Cria um novo Post e retorna o post criado.
+   * @summary Cria um novo post.
+   */
+
+  @Tags('Posts')
+  @Security('bearer_Token')
+  @Post('{id}')
+  @OperationId('createPost')
+  @SuccessResponse('201', 'Created')
   public async handle(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ) {
-    try {
-      const postRespository = getCustomRepository(PostRepository);
-      const userRepository = getCustomRepository(UserRepository);
+    @Body() requestBody: IPostRequest,
+    @Path() id: string
+  ): Promise<IPost> {
+    const postRespository = getCustomRepository(PostRepository);
+    const userRepository = getCustomRepository(UserRepository);
 
-      const { id } = request.params;
+    const { title, content, category } = requestBody;
 
-      const { body } = request;
+    const createPost = new CreatePostService(postRespository, userRepository);
 
-      const { title, content, category } = body;
+    const data: IcreatePostRequestDTO = {
+      title,
+      content,
+      category,
+      postOwnerId: id,
+    };
 
-      const createPost = new CreatePostService(postRespository, userRepository);
+    const serviceResult = await createPost.execute(data);
 
-      const data: IcreatePostRequestDTO = {
-        title,
-        content,
-        category,
-        postOwnerId: id,
-      };
-
-      const serviceResult = await createPost.execute(data);
-
-      return response.status(201).send(serviceResult);
-    } catch (error: any) {
-      logger.error(`CreateUserController: ${error.message}`);
-      return next(error);
-    }
+    return serviceResult;
   }
 }

@@ -5,8 +5,8 @@ import helmet from 'helmet';
 import compression from 'compression';
 import cors from 'cors';
 import config, { environments } from './config/config';
-import routes from './routes';
 import ApiError from './utils/apiError.utils';
+import { RegisterRoutes } from './router/routes';
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.options('*', cors());
 if (config.env !== environments.PRODUCTION) {
   app.use(morgan('tiny'));
 }
-routes(app);
+RegisterRoutes(app);
 
 app.use(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

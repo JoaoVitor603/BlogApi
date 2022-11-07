@@ -10,7 +10,7 @@ interface TokenPayload {
   admin: boolean;
 }
 
-export default function isAuthenticated(
+export default function authentication(
   request: Request,
   response: Response,
   next: NextFunction

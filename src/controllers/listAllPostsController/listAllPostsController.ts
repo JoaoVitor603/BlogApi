@@ -1,23 +1,29 @@
-import { NextFunction, Request, Response } from 'express';
-import logger from '../../config/logger';
-import IController from '../../models/IController';
+import {
+  Controller,
+  Get,
+  OperationId,
+  Route,
+  SuccessResponse,
+  Tags,
+} from 'tsoa';
+import IPost from '../../models/IPost';
 import ListAllPostsUserService from '../../services/listAllPostsService/listAllPosts';
 
-export default class ListAllPostsController implements IController {
-  public async handle(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ) {
-    try {
-      const listAllPosts = new ListAllPostsUserService();
+@Route('/allPosts')
+export class ListAllPostsController extends Controller {
+  /**
+   * Lista todos posts.
+   * @summary Lista todos os posts da API
+   */
+  @Tags('Posts')
+  @Get('')
+  @OperationId('listAllPosts')
+  @SuccessResponse('201', 'Created')
+  public async handle(): Promise<IPost[]> {
+    const listAllPosts = new ListAllPostsUserService();
 
-      const serviceResult = await listAllPosts.execute();
+    const serviceResult = await listAllPosts.execute();
 
-      return response.status(201).send(serviceResult);
-    } catch (error: any) {
-      logger.error(`ListUserController: ${error.message}`);
-      return next(error);
-    }
+    return serviceResult;
   }
 }

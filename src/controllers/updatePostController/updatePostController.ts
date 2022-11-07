@@ -1,41 +1,51 @@
-import { NextFunction, Request, Response } from 'express';
+import {
+  Body,
+  Controller,
+  OperationId,
+  Path,
+  Put,
+  Route,
+  SuccessResponse,
+  Tags,
+} from 'tsoa';
 import { getCustomRepository } from 'typeorm';
-import logger from '../../config/logger';
 import { PostRepository } from '../../database/repositories/PostRepository';
-
-import IController from '../../models/IController';
-import IUpdatePostRequestDTO from '../../services/updatePostService/updatePostRequestDTO';
+import IPost from '../../models/IPost';
+import IUpdatePostRequestDTO, {
+  IUpdatePostRequestBody,
+} from '../../services/updatePostService/updatePostRequestDTO';
 import UpdatePostService from '../../services/updatePostService/updatePostService';
-
-export default class UpdatePostController implements IController {
+// TODO - Alterar serviço do front enviar id do usuário nos params
+@Route('/posts')
+export class UpdatePostController extends Controller {
+  /**
+   * Altera campos do post.
+   * @summary modifica campos de um post existente.
+   */
+  @Tags('Posts')
+  @Put('{id}')
+  @OperationId('updatePosts')
+  @SuccessResponse('201', 'Created')
   public async handle(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ) {
-    try {
-      const postRespository = getCustomRepository(PostRepository);
+    @Body() requestBody: IUpdatePostRequestBody,
+    @Path() id: string
+  ): Promise<IPost> {
+    const postRespository = getCustomRepository(PostRepository);
 
-      const { body } = request;
+    const { postId, title, content, category } = requestBody;
 
-      const { postId, postOwnerId, title, content, category } = body;
+    const postsUser = new UpdatePostService(postRespository);
 
-      const postsUser = new UpdatePostService(postRespository);
+    const data: IUpdatePostRequestDTO = {
+      postId,
+      postOwnerId: id,
+      title,
+      content,
+      category,
+    };
 
-      const data: IUpdatePostRequestDTO = {
-        postId,
-        postOwnerId,
-        title,
-        content,
-        category,
-      };
+    const serviceResult = await postsUser.execute(data);
 
-      const serviceResult = await postsUser.execute(data);
-
-      return response.status(201).send(serviceResult);
-    } catch (error: any) {
-      logger.error(`ListUserController: ${error.message}`);
-      return next(error);
-    }
+    return serviceResult;
   }
 }

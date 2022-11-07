@@ -1,39 +1,44 @@
-import { NextFunction, Request, Response } from 'express';
+import {
+  Controller,
+  Get,
+  OperationId,
+  Path,
+  Route,
+  Security,
+  SuccessResponse,
+  Tags,
+} from 'tsoa';
 import { getCustomRepository } from 'typeorm';
-import logger from '../../config/logger';
 import { PostRepository } from '../../database/repositories/PostRepository';
 import { UserRepository } from '../../database/repositories/UserRepository';
-import IController from '../../models/IController';
+import IPost from '../../models/IPost';
 import IlistUserPostRequestDTO from '../../services/listUserPostsService/IlistUserPostRequestDTO';
 import ListPostsUserService from '../../services/listUserPostsService/listUserPostsService';
 
-export default class ListUserPostsController implements IController {
-  public async handle(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ) {
-    try {
-      const postRespository = getCustomRepository(PostRepository);
-      const userRepository = getCustomRepository(UserRepository);
+@Route('/posts')
+export class ListUserPostsController extends Controller {
+  /**
+   * Lista todos posts de um usuário.
+   * @summary Lista de posts de um usuário.
+   * @param id
+   */
+  @Tags('Posts')
+  @Get('{id}')
+  @OperationId('listUserPosts')
+  @Security('bearer_Token')
+  @SuccessResponse('201', 'Created')
+  public async handle(@Path() id: string): Promise<IPost[]> {
+    const postRespository = getCustomRepository(PostRepository);
+    const userRepository = getCustomRepository(UserRepository);
 
-      const { id } = request.params;
+    const postsUser = new ListPostsUserService(postRespository, userRepository);
 
-      const postsUser = new ListPostsUserService(
-        postRespository,
-        userRepository
-      );
+    const data: IlistUserPostRequestDTO = {
+      id,
+    };
 
-      const data: IlistUserPostRequestDTO = {
-        id,
-      };
+    const serviceResult = await postsUser.execute(data);
 
-      const serviceResult = await postsUser.execute(data);
-
-      return response.status(201).send(serviceResult);
-    } catch (error: any) {
-      logger.error(`ListUserController: ${error.message}`);
-      return next(error);
-    }
+    return serviceResult;
   }
 }

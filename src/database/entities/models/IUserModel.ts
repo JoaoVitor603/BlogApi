@@ -7,3 +7,12 @@ export default interface IUserModel {
   created_at?: Date;
   updated_at?: Date;
 }
+
+export interface IUserModelResponse {
+  id: string;
+  userName: string;
+  email: string;
+  admin: boolean;
+  created_at?: Date;
+  updated_at?: Date;
+}

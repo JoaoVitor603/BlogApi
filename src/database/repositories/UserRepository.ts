@@ -15,7 +15,6 @@ export class UserRepository extends Repository<Users> {
     return saveResult.id.toString();
   }
 
-  // ToDO criar interface para o tipo das Promise
   public async findByEmail(email: string): Promise<IUserModel | undefined> {
     const user = await this.findOne({
       where: {

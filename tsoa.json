@@ -1,0 +1,26 @@
+{
+  "entryFile": "src/index.ts",
+  "controllerPathGlobs": ["src/controllers/**/*Controller.ts"],
+  "noImplicitAdditionalProperties": "throw-on-extras",
+
+  "spec": {
+    "outputDirectory": ".",
+    "specVersion": 3,
+    "basePath": "/api/v1",
+    "name": "BlogApi",
+    "schemes": ["http", "https"],
+    "host": "localhost:3001",
+    "securityDefinitions": {
+      "bearer_Token": {
+        "type": "http",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "routes": {
+    "basePath": "/api/v1",
+    "authenticationModule": "src/middlewares/authentication.ts",
+    "routesDir": "src/router"
+  }
+}

@@ -1,0 +1,592 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"IUserModel": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"userName": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					},
+					"admin": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"userName",
+					"email",
+					"password",
+					"admin"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IPost": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"postOwnerUserName": {
+						"type": "string"
+					},
+					"category": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"postOwner": {
+						"$ref": "#/components/schemas/IUserModel"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"title",
+					"content",
+					"postOwnerUserName",
+					"category"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IPostRequest": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"category": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"title",
+					"content",
+					"category"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"title": "Titulo de Example",
+					"content": "sou um exemplo",
+					"category": [
+						"TECNOLOGIA"
+					]
+				}
+			},
+			"IUserModelResponse": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"userName": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"admin": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updated_at": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"userName",
+					"email",
+					"admin"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ICreateSessionResponseDTO": {
+				"properties": {
+					"user": {
+						"$ref": "#/components/schemas/IUserModelResponse"
+					},
+					"token": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"user",
+					"token"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ValidateErrorJSON": {
+				"properties": {
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ICreateSessionRequestDTO": {
+				"properties": {
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"email": "admin@gmail.com",
+					"password": "teste123"
+				}
+			},
+			"IcreateUserRequestDTO": {
+				"properties": {
+					"userName": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"userName",
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IDeletePostRequestBody": {
+				"properties": {
+					"postId": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"postId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IUpdatePostRequestBody": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"category": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"postId": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"title",
+					"content",
+					"category",
+					"postId"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"title": "Titulo de Example",
+					"content": "sou um exemplo",
+					"category": [
+						"TECNOLOGIA"
+					],
+					"postId": "08864772-2c8d-405f-84bf-fe09f1d0f939"
+				}
+			}
+		},
+		"securitySchemes": {
+			"bearer_Token": {
+				"type": "http",
+				"scheme": "Bearer",
+				"bearerFormat": "JWT"
+			}
+		}
+	},
+	"info": {
+		"title": "BlogApi",
+		"version": "1.0.0",
+		"description": "Quickstart NodeJs API com Typescript",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/posts/{id}": {
+			"post": {
+				"operationId": "createPost",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IPost"
+								}
+							}
+						}
+					}
+				},
+				"description": "Cria um novo Post e retorna o post criado.",
+				"summary": "Cria um novo post.",
+				"tags": [
+					"Posts"
+				],
+				"security": [
+					{
+						"bearer_Token": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IPostRequest"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "deletePost",
+				"responses": {
+					"201": {
+						"description": "Created"
+					},
+					"400": {
+						"description": "Wrong email/password",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ValidateErrorJSON"
+									},
+									"type": "array"
+								},
+								"examples": {
+									"Example 1": {
+										"value": [
+											{
+												"message": "User not found"
+											},
+											{
+												"message": "Post not found"
+											},
+											{
+												"message": "this post not belongs to this user"
+											}
+										]
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "Realiza a deleção de um post.",
+				"summary": "Deleta um post.",
+				"tags": [
+					"Posts"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IDeletePostRequestBody"
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"operationId": "listUserPosts",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/IPost"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Lista todos posts de um usuário.",
+				"summary": "Lista de posts de um usuário.",
+				"tags": [
+					"Posts"
+				],
+				"security": [
+					{
+						"bearer_Token": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "updatePosts",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IPost"
+								}
+							}
+						}
+					}
+				},
+				"description": "Altera campos do post.",
+				"summary": "modifica campos de um post existente.",
+				"tags": [
+					"Posts"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IUpdatePostRequestBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/session": {
+			"post": {
+				"operationId": "createSession",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ICreateSessionResponseDTO"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Wrong email/password",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ValidateErrorJSON"
+									},
+									"type": "array"
+								},
+								"examples": {
+									"Example 1": {
+										"value": [
+											{
+												"message": "Incorrect email/password combination."
+											}
+										]
+									}
+								}
+							}
+						}
+					}
+				},
+				"description": "Cria uma sessão do usuário.",
+				"summary": "Cria uma nova sessão.",
+				"tags": [
+					"Session"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ICreateSessionRequestDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users": {
+			"post": {
+				"operationId": "createUser",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IcreateUserRequestDTO"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/allPosts": {
+			"get": {
+				"operationId": "listAllPosts",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/IPost"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Lista todos posts.",
+				"summary": "Lista todos os posts da API",
+				"tags": [
+					"Posts"
+				],
+				"security": [],
+				"parameters": []
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "http://localhost:3001/api/v1"
+		}
+	]
+}

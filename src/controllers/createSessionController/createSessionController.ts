@@ -1,38 +1,51 @@
-import { NextFunction, Request, Response } from 'express';
+import {
+  Body,
+  Controller,
+  OperationId,
+  Post,
+  Response,
+  Route,
+  SuccessResponse,
+  Tags,
+} from 'tsoa';
 import { getCustomRepository } from 'typeorm';
-import logger from '../../config/logger';
 import { UserRepository } from '../../database/repositories/UserRepository';
-import IController from '../../models/IController';
+import { ValidateErrorJSON } from '../../models/IPost';
 import CreateSessionService from '../../services/createSessionService/createSessionService';
 
-import IcreateSessionRequestDTO from '../../services/createSessionService/IcreateSessionRequest';
+import ICreateSessionRequestDTO from '../../services/createSessionService/IcreateSessionRequest';
+import ICreateSessionResponseDTO from '../../services/createSessionService/IcreateSessionResponse';
 
-export default class CreateSessionController implements IController {
+@Route('/session')
+export class CreateSessionController extends Controller {
+  /**
+   * Cria uma sessão do usuário.
+   * @summary Cria uma nova sessão.
+   */
+
+  @Tags('Session')
+  @Post('')
+  @OperationId('createSession')
+  @SuccessResponse('201', 'Created')
+  @Response<ValidateErrorJSON[]>(400, 'Wrong email/password', [
+    { message: 'Incorrect email/password combination.' },
+  ])
   public async handle(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ) {
-    try {
-      const userRepository = getCustomRepository(UserRepository);
+    @Body() requestBody: ICreateSessionRequestDTO
+  ): Promise<ICreateSessionResponseDTO> {
+    const userRepository = getCustomRepository(UserRepository);
 
-      const { body } = request;
+    const { email, password } = requestBody;
 
-      const { email, password } = body;
+    const createSession = new CreateSessionService(userRepository);
 
-      const createSession = new CreateSessionService(userRepository);
+    const data: ICreateSessionRequestDTO = {
+      email,
+      password,
+    };
 
-      const data: IcreateSessionRequestDTO = {
-        email,
-        password,
-      };
+    const serviceResult = await createSession.execute(data);
 
-      const serviceResult = await createSession.execute(data);
-
-      return response.status(201).send(serviceResult);
-    } catch (error: any) {
-      logger.error(`CreateUserController: ${error.message}`);
-      return next(error);
-    }
+    return serviceResult;
   }
 }

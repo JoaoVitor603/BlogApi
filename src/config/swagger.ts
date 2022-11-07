@@ -4,6 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import { version } from '../../package.json';
 import config from './config';
 import logger from './logger';
+import TsoaSwagger from '../../swagger.json';
 
 const options: swaggerJsdoc.Options = {
   definition: {
@@ -35,7 +36,7 @@ const options: swaggerJsdoc.Options = {
 const swaggerSpec = swaggerJsdoc(options);
 
 function swaggerDocs(app: Express, url: string, port: number) {
-  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(TsoaSwagger));
 
   app.get('/docs.json', (req: Request, res: Response) => {
     res.setHeader('Content-Type', 'application/json');

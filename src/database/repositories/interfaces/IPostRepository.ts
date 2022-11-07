@@ -8,9 +8,9 @@ export default interface IPostRepository {
     postOwnerId: string
   ): Promise<IPostModel | undefined>;
   findById(id: string): Promise<IPostModel | undefined>;
-  createNewPost(user: IPost): Promise<string>;
+  createNewPost(user: IPost): Promise<IPost>;
   deletePost(post: IPost): Promise<void>;
-  listPosts(id: string): Promise<IPostModel[]>;
-  updatePost(post: IPostModel): Promise<string>;
+  listPosts(id: string): Promise<IPost[]>;
+  updatePost(post: IPostModel): Promise<IPost>;
   listAllPosts(): Promise<Post[]>;
 }

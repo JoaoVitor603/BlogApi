@@ -1,44 +1,55 @@
-import { NextFunction, Request, Response } from 'express';
+import {
+  Body,
+  Controller,
+  Delete,
+  OperationId,
+  Path,
+  Response,
+  Route,
+  SuccessResponse,
+  Tags,
+} from 'tsoa';
 import { getCustomRepository } from 'typeorm';
-import logger from '../../config/logger';
 import { PostRepository } from '../../database/repositories/PostRepository';
 import { UserRepository } from '../../database/repositories/UserRepository';
-import IController from '../../models/IController';
+import { ValidateErrorJSON } from '../../models/IPost';
 import DeletePostService from '../../services/deletePostService/deletePostService';
-import IDeletePostRequestDTO from '../../services/deletePostService/IdeletePostRequestDTO';
+import IDeletePostRequestDTO, {
+  IDeletePostRequestBody,
+} from '../../services/deletePostService/IdeletePostRequestDTO';
 
-export default class DeletePostController implements IController {
+@Route('/posts')
+export class DeletePostController extends Controller {
+  /**
+   * Realiza a deleção de um post.
+   * @summary Deleta um post.
+   */
+
+  @Tags('Posts')
+  @Delete('{id}')
+  @OperationId('deletePost')
+  @SuccessResponse('201', 'Created')
+  @Response<ValidateErrorJSON[]>(400, 'Wrong email/password', [
+    { message: 'User not found' },
+    { message: 'Post not found' },
+    { message: 'this post not belongs to this user' },
+  ])
   public async handle(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ) {
-    try {
-      const deleteRespository = getCustomRepository(PostRepository);
-      const userRepository = getCustomRepository(UserRepository);
+    @Body() requestBody: IDeletePostRequestBody,
+    @Path() id: string
+  ): Promise<void> {
+    const deleteRespository = getCustomRepository(PostRepository);
+    const userRepository = getCustomRepository(UserRepository);
 
-      const { id } = request.params;
+    const { postId } = requestBody;
 
-      const { body } = request;
+    const postsUser = new DeletePostService(deleteRespository, userRepository);
 
-      const { postId } = body;
+    const data: IDeletePostRequestDTO = {
+      postId,
+      postOwnerId: id,
+    };
 
-      const postsUser = new DeletePostService(
-        deleteRespository,
-        userRepository
-      );
-
-      const data: IDeletePostRequestDTO = {
-        postId,
-        postOwnerId: id,
-      };
-
-      const serviceResult = await postsUser.execute(data);
-
-      return response.status(201).send(serviceResult);
-    } catch (error: any) {
-      logger.error(`ListUserController: ${error.message}`);
-      return next(error);
-    }
+    await postsUser.execute(data);
   }
 }
