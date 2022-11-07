@@ -54,13 +54,13 @@ class PostRepositoryFake implements IPostRepository {
     },
   ];
 
-  async createNewPost(Post: IPost): Promise<string> {
+  async createNewPost(Post: IPost): Promise<IPost> {
     const id = `48eca48e6j15fac272b62${Math.floor(Math.random() * 20) + 1}`;
     this.mockPosts.push({ id, ...Post });
-    return id;
+    return Post;
   }
 
-  async updatePost(post: IPost): Promise<string> {
+  async updatePost(post: IPost): Promise<IPost> {
     const oldpost = this.mockPosts.find((item) => {
       return item.id;
     });
@@ -72,7 +72,7 @@ class PostRepositoryFake implements IPostRepository {
       category: post.category,
     };
 
-    return updatedPost.title;
+    return post;
   }
 }
 

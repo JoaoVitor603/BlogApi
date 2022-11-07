@@ -13,7 +13,7 @@ import CreateUserService from '../../services/createUserService/createUserServic
 import IcreateUserRequestDTO from '../../services/createUserService/IcreateUserRequestDTO';
 
 @Route('/users')
-export class CreateUserController implements Controller {
+export class CreateUserController extends Controller {
   @Tags('User')
   @Post('')
   @OperationId('createUser')
