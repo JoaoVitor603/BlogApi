@@ -7,13 +7,17 @@ import {
   SuccessResponse,
   Tags,
 } from 'tsoa';
-import { getCustomRepository } from 'typeorm';
-import { UserRepository } from '../../database/repositories/UserRepository';
+import { injectable } from 'tsyringe';
 import CreateUserService from '../../services/createUserService/createUserService';
 import IcreateUserRequestDTO from '../../services/createUserService/IcreateUserRequestDTO';
 
+@injectable()
 @Route('/users')
 export class CreateUserController extends Controller {
+  constructor(private createUserService: CreateUserService) {
+    super();
+  }
+
   @Tags('User')
   @Post('')
   @OperationId('createUser')
@@ -23,17 +27,13 @@ export class CreateUserController extends Controller {
   ): Promise<string> {
     const { userName, email, password } = requestBody;
 
-    const createUser = new CreateUserService(
-      getCustomRepository(UserRepository)
-    );
-
     const data: IcreateUserRequestDTO = {
       userName,
       email,
       password,
     };
 
-    const serviceResult = await createUser.execute(data);
+    const serviceResult = await this.createUserService.execute(data);
 
     return serviceResult;
   }

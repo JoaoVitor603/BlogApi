@@ -80,7 +80,7 @@ web_modules/
 .env.production
 
 #Routes TSOA
-.src/router/routes.ts
+src/router/routes.ts
 
 
 # parcel-bundler cache (https://parceljs.org/)

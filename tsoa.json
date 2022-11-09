@@ -20,6 +20,7 @@
   },
   "routes": {
     "basePath": "/api/v1",
+    "iocModule": "src/ioc",
     "authenticationModule": "src/middlewares/authentication.ts",
     "routesDir": "src/router"
   }

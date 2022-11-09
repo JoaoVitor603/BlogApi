@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import './container';
 import express, { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';

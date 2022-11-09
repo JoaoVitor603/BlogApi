@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { compact, isBuffer, update } from 'lodash';
+import { getRepository } from 'typeorm';
 import IUser from '../../../models/IUser';
 import IUserModel from '../../entities/models/IUserModel';
+import User from '../../entities/User.Entity';
 import IUserRepository from '../interfaces/IUserRepository';
 
 class UserRepositoryFake implements IUserRepository {
@@ -12,9 +14,8 @@ class UserRepositoryFake implements IUserRepository {
       email: 'teste10@gmail.com',
       password: 'teste123',
       admin: false,
-      created_at: '2022-07-06T03:51:22.354Z' as unknown as Date,
-
-      updated_at: '2022-07-06T03:51:22.354Z' as unknown as Date,
+      created_at: new Date('2022-07-06T03:51:22.354Z'),
+      updated_at: new Date('2022-07-06T03:52:22.354Z'),
     },
   ];
 

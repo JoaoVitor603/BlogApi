@@ -1,9 +1,10 @@
+import { singleton } from 'tsyringe';
 import IPostRepository from '../../database/repositories/interfaces/IPostRepository';
 import IUserRepository from '../../database/repositories/interfaces/IUserRepository';
-
 import ApiError from '../../utils/apiError.utils';
 import IcreatePostRequestDTO from './IcreatePostRequestDTO';
 
+@singleton()
 export default class CreateUserService {
   constructor(
     public postRespository: IPostRepository,
